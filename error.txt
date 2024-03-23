@@ -1,0 +1,94 @@
+When running `python3 setup_cuda.py install` inside the dansk-llama container, 
+this error occurs:
+
+```
+root@a6ff87a1c2d0:/hqq/kernels# python3 setup_cuda.py install
+No CUDA runtime is found, using CUDA_HOME='/usr/local/cuda'
+/usr/lib/python3.10/distutils/dist.py:274: UserWarning: Unknown distribution option: 'extra_compile_args'   
+  warnings.warn(msg)
+running install
+/usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+/usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+running bdist_egg
+running egg_info
+writing hqq_aten.egg-info/PKG-INFO
+writing dependency_links to hqq_aten.egg-info/dependency_links.txt
+writing top-level names to hqq_aten.egg-info/top_level.txt
+/usr/local/lib/python3.10/dist-packages/torch/utils/cpp_extension.py:500: UserWarning: Attempted to use ninja as the BuildExtension backend but we could not find ninja.. Falling back to using the slow distutils backend.
+  warnings.warn(msg.format('we could not find ninja.'))
+reading manifest file 'hqq_aten.egg-info/SOURCES.txt'
+writing manifest file 'hqq_aten.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_ext
+/usr/local/lib/python3.10/dist-packages/torch/utils/cpp_extension.py:415: UserWarning: The detected CUDA version (12.4) has a minor version mismatch with the version that was used to compile PyTorch (12.1). Most likely this shouldn't be a problem.
+  warnings.warn(CUDA_MISMATCH_WARN.format(cuda_str_version, torch.version.cuda))
+/usr/local/lib/python3.10/dist-packages/torch/utils/cpp_extension.py:425: UserWarning: There are no x86_64-linux-gnu-g++ version bounds defined for CUDA version 12.4
+  warnings.warn(f'There are no {compiler_name} version bounds defined for CUDA version {cuda_str_version}') 
+building 'hqq_aten' extension
+creating build
+creating build/temp.linux-x86_64-3.10
+x86_64-linux-gnu-gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O2 -Wall -g -fstack-protector-strong -Wformat -Werror=format-security -g -fwrapv -O2 -g -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -fPIC -I/usr/local/lib/python3.10/dist-packages/torch/include -I/usr/local/lib/python3.10/dist-packages/torch/include/torch/csrc/api/include -I/usr/local/lib/python3.10/dist-packages/torch/include/TH -I/usr/local/lib/python3.10/dist-packages/torch/include/THC -I/usr/local/cuda/include -I/usr/include/python3.10 -c hqq_aten_cuda.cpp -o build/temp.linux-x86_64-3.10/hqq_aten_cuda.o -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE="_gcc" -DPYBIND11_STDLIB="_libstdcpp" -DPYBIND11_BUILD_ABI="_cxxabi1011" -DTORCH_EXTENSION_NAME=hqq_aten -D_GLIBCXX_USE_CXX11_ABI=0 -std=c++17
+/usr/local/lib/python3.10/dist-packages/torch/cuda/__init__.py:628: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+Traceback (most recent call last):
+  File "/hqq/kernels/setup_cuda.py", line 4, in <module>
+    setup(
+  File "/usr/lib/python3/dist-packages/setuptools/__init__.py", line 153, in setup
+    return distutils.core.setup(**attrs)
+  File "/usr/lib/python3.10/distutils/core.py", line 148, in setup
+    dist.run_commands()
+  File "/usr/lib/python3.10/distutils/dist.py", line 966, in run_commands
+    self.run_command(cmd)
+  File "/usr/lib/python3.10/distutils/dist.py", line 985, in run_command
+    cmd_obj.run()
+  File "/usr/lib/python3/dist-packages/setuptools/command/install.py", line 74, in run
+    self.do_egg_install()
+  File "/usr/lib/python3/dist-packages/setuptools/command/install.py", line 116, in do_egg_install
+    self.run_command('bdist_egg')
+  File "/usr/lib/python3.10/distutils/cmd.py", line 313, in run_command
+    self.distribution.run_command(command)
+  File "/usr/lib/python3.10/distutils/dist.py", line 985, in run_command
+    cmd_obj.run()
+  File "/usr/lib/python3/dist-packages/setuptools/command/bdist_egg.py", line 164, in run
+    cmd = self.call_command('install_lib', warn_dir=0)
+  File "/usr/lib/python3/dist-packages/setuptools/command/bdist_egg.py", line 150, in call_command
+    self.run_command(cmdname)
+  File "/usr/lib/python3.10/distutils/cmd.py", line 313, in run_command
+    self.distribution.run_command(command)
+  File "/usr/lib/python3.10/distutils/dist.py", line 985, in run_command
+    cmd_obj.run()
+  File "/usr/lib/python3/dist-packages/setuptools/command/install_lib.py", line 23, in run
+    self.build()
+  File "/usr/lib/python3.10/distutils/command/install_lib.py", line 109, in build
+    self.run_command('build_ext')
+  File "/usr/lib/python3.10/distutils/cmd.py", line 313, in run_command
+    self.distribution.run_command(command)
+  File "/usr/lib/python3.10/distutils/dist.py", line 985, in run_command
+    cmd_obj.run()
+  File "/usr/lib/python3/dist-packages/setuptools/command/build_ext.py", line 79, in run
+    _build_ext.run(self)
+  File "/usr/lib/python3.10/distutils/command/build_ext.py", line 340, in run
+    self.build_extensions()
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/cpp_extension.py", line 871, in build_extensions
+    build_ext.build_extensions(self)
+  File "/usr/lib/python3.10/distutils/command/build_ext.py", line 449, in build_extensions
+    self._build_extensions_serial()
+  File "/usr/lib/python3.10/distutils/command/build_ext.py", line 474, in _build_extensions_serial
+    _build_ext.build_extension(self, ext)
+  File "/usr/lib/python3.10/distutils/command/build_ext.py", line 529, in build_extension
+    _build_ext.build_extension(self, ext)
+  File "/usr/lib/python3.10/distutils/command/build_ext.py", line 529, in build_extension
+    objects = self.compiler.compile(sources,
+  File "/usr/lib/python3.10/distutils/ccompiler.py", line 574, in compile
+    self._compile(obj, src, ext, cc_args, extra_postargs, pp_opts)
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/cpp_extension.py", line 607, in unix_wrap_single_compile
+    cflags = unix_cuda_flags(cflags)
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/cpp_extension.py", line 574, in unix_cuda_flags 
+    cflags + _get_cuda_arch_flags(cflags))
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/cpp_extension.py", line 1976, in _get_cuda_arch_flags
+    arch_list[-1] += '+PTX'
+IndexError: list index out of range
+```
