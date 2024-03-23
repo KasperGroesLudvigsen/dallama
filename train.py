@@ -57,6 +57,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
 from transformers.tokenization_utils_fast import PreTrainedTokenizerFast
 from fastcore.parallel import parallel
 
+from codecarbon import track_emissions
+
 try:
     from hqq.core.quantize import HQQLinear, HQQBackend, BaseQuantizeConfig
 except ImportError:
@@ -936,6 +938,7 @@ def fsdp_main(local_rank:int, world_size:int, args:Dict):
 
 # Entry point, using fastcore's call_parse to parse args from command line and then calling fsdp_main
 @call_parse()
+@track_emissions(log_level="error")
 def main(
     world_size: int = -1, # Number of GPUs to use. -1 = all available GPUs.
     train_type: Param("", choices=["full", "lora", "qlora", "custom_qlora", "custom_lora", "hqq_lora"]) = "qlora", # "full", "lora", "qlora", or "custom_qlora"
