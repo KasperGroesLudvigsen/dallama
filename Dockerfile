@@ -64,5 +64,4 @@ RUN pip install ninja
 # Install hqq kernel stuff
 RUN cd hqq/kernels && python3 setup_cuda.py install
 
-# docker build --build-arg ACCESS_TOKEN=<your_access_token> -t your_image_name:tag .
-# docker build -t your_image_name:tag .
+# docker build --no-cache --network host -t dansk-llama .
