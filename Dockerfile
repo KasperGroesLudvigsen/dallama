@@ -70,4 +70,4 @@ COPY . .
 #RUN cd hqq/kernels && python3 setup_cuda.py install
 
 # docker build --no-cache --network host -t dallama-trainer .
-# docker run dallama-trainer -e HF_TOKEN=<INSERT TOKEN> sh -c "install_hqq.sh && start_training.sh"
+# docker run dallama-trainer --gpus all -e HF_TOKEN=<INSERT TOKEN> sh -c "install_hqq.sh && start_training.sh"
