@@ -59,6 +59,8 @@ from fastcore.parallel import parallel
 
 from codecarbon import track_emissions
 
+HF_TOKEN = os.environ.get("HF_TOKEN")
+
 try:
     from hqq.core.quantize import HQQLinear, HQQBackend, BaseQuantizeConfig
 except ImportError:
@@ -542,7 +544,7 @@ def fsdp_main(local_rank:int, world_size:int, args:Dict):
 
 
     # Load tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(args["model_name"])
+    tokenizer = AutoTokenizer.from_pretrained(args["model_name"], token=HF_TOKEN)
     tokenizer.pad_token_id = tokenizer.eos_token_id # TODO check if it exists first
 
     # Set up dataloader
@@ -557,6 +559,7 @@ def fsdp_main(local_rank:int, world_size:int, args:Dict):
         if (args["low_memory"] and rank == 0) or (not args["low_memory"]):
             model = AutoModelForCausalLM.from_pretrained(
                 args["model_name"],
+                token=HF_TOKEN,
                 use_cache=False,
                 torch_dtype=torch_dtype,
                 _attn_implementation=attn_impl
@@ -564,7 +567,7 @@ def fsdp_main(local_rank:int, world_size:int, args:Dict):
             dtype = torch_dtype if args["precision"] == "bf16" else None
             model.to(dtype=dtype, device="cpu" if args["low_memory"] else rank)
         else:
-            cfg = AutoConfig.from_pretrained(args["model_name"])
+            cfg = AutoConfig.from_pretrained(args["model_name"], token=HF_TOKEN)
             cfg.use_cache = False
             cfg._attn_implementation = attn_impl
             with init_empty_weights():
@@ -572,7 +575,7 @@ def fsdp_main(local_rank:int, world_size:int, args:Dict):
             if args["precision"] == "bf16":
                 model.to(torch_dtype)
     elif args["train_type"] in ["qlora", "custom_qlora", "hqq_lora"]: # Our custom loading
-        cfg = AutoConfig.from_pretrained(args["model_name"])
+        cfg = AutoConfig.from_pretrained(args["model_name"], token=HF_TOKEN)
         cfg.use_cache = False
         cfg._attn_implementation = attn_impl
 
